@@ -1,0 +1,48 @@
+//Dynamically Generate HTML table
+
+function GenerateHTMLTable(headers,headerNames,tableId,whereToBind data) {
+    // Create table elements
+    let table = $('<table id=' + tableId + '></table>').css({
+        'width': '100%',
+        'border-collapse': 'collapse'
+    });
+    let thead = $('<thead></thead>');
+    let tbody = $('<tbody></tbody>');
+
+    // Create header row
+    let headerRow = $('<tr></tr>');
+    headers.forEach(headerText => {
+        headerRow.append(
+            `<th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #4CAF50;text-align: center; color: white;">${headerText}</th>`
+        );
+    });
+    thead.append(headerRow);
+
+    // Create data rows
+    data.forEach((rowData, index) => {
+        let row = $('<tr></tr>');
+
+        // Add Serial Number
+        row.append(
+            `<td style="border: 1px solid black; padding: 8px; text-align: center; background-color: #d3d3d3;text-align: center;width: 5px;">${index + 1}</td>`
+        );
+
+        headers.slice(1).forEach(header => {
+            // Use the header mapping to get the field from rowData
+            let field = headerNames[header];
+            let cellData = rowData[field] !== undefined ? rowData[field] : '';
+            row.append(
+                `<td style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f9f9f9;">${cellData}</td>`
+            );
+        });
+
+        tbody.append(row);
+    });
+
+    // Append thead and tbody to the table
+    table.append(thead);
+    table.append(tbody);
+
+    // Append the table to the container
+    $('#'+ whereToBind +).append(table);
+}
